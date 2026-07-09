@@ -12,7 +12,7 @@ import SwiftData
 struct EscapeApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            Song.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
@@ -25,7 +25,7 @@ struct EscapeApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            LoginView()
         }
         .modelContainer(sharedModelContainer)
     }

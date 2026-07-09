@@ -5,14 +5,22 @@
 //  Created by Tatiana6mo on 6/30/26.
 //
 
-import Foundation
 import SwiftData
 
 @Model
-final class Item {
-    var timestamp: Date
+class Song {
+    var title: String
+    var artist: String
+    var albumImage: String
+    var audioURL: String
+    var isFavorite: Bool
     
-    init(timestamp: Date) {
-        self.timestamp = timestamp
+    init(title: String, artist: String, albumImage: String, audioURL: String, isFavorite: Bool = false) {
+        self.title = title
+        self.artist = artist
+        self.albumImage = albumImage
+        self.audioURL = audioURL
+        self.isFavorite = false
     }
 }
+
