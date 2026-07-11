@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SettingsView: View {
     
     @AppStorage("isDarkMode") var isDarkMode: Bool = false
     @AppStorage("fontSize") var fontSize: String = "Medium"
     @AppStorage("language") var language: String = "English"
+    @AppStorage("loggedInUserId") private var loggedInUserId: String = ""
     
     // Colors based on mode
     var backgroundColor: Color {
@@ -92,5 +94,12 @@ struct SettingsView: View {
         }
         .animation(.easeInOut(duration: 0.3), value: isDarkMode)
     }
+    
+    func logOut() {
+        loggedInUserId = ""
+    }
 }
+
+
+
 

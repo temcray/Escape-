@@ -15,12 +15,10 @@ struct HomeView: View {
     
     // Temp placeholder until Jamendo
     let songs = [
-        Song(title: "Ocean Breeze", artist: "Artist One", albumImage: "escapeImage 1", audioURL: ""),
-        Song(title: "City Lights", artist: "Artist Two", albumImage: "escapeImage", audioURL: ""),
-        Song(title: "Morning Ride", artist: "Artist Three", albumImage: "escapeImage2", audioURL: "")
+        JamendoSong(id: "1", title: "Ocean Breeze", artist: "Artist One", album: "Album One", albumImage: "escapeImage 1", audioURL: ""),
+        JamendoSong(id: "2", title: "City Lights", artist: "Artist Two", album: "Album Two", albumImage: "escapeImage", audioURL: ""),
+        JamendoSong(id: "3", title: "Morning Ride", artist: "Artist Three", album: "Album Three", albumImage: "escapeImage2", audioURL: "")
     ]
-    
-    
     var body: some View {
         NavigationView {
             ZStack {
@@ -55,6 +53,16 @@ struct HomeView: View {
                             .padding()
                             
                         }
+                    } else {
+                        // LIST VIEW
+                        ScrollView {
+                            VStack(spacing: 15) {
+                                ForEach(songs, id: \.title) { song in
+                                    SongCardView(song: song)
+                                }
+                            }
+                            .padding()
+                        }
                     }
                 }
             }
@@ -66,27 +74,29 @@ struct HomeView: View {
 }
 
 // SONG CARD
+
 struct SongCardView: View {
     
-    let song: Song
+    let song: JamendoSong
     
     var body: some View {
-        VStack {
-            Image(song.albumImage)
-                .resizable()
-                .scaledToFill()
-                .frame(width: 150, height: 150)
-                .cornerRadius(12)
-                .clipped()
-            
-            Text(song.title)
-                .foregroundColor(.white)
-                .font(.headline)
-            
-            Text(song.artist)
-                .foregroundColor(.white.opacity(0.7))
-                .font(.subheadline)
+        NavigationLink(destination: PlayerView(song: song)) {
+            VStack {
+                Image(song.albumImage)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 150, height: 150)
+                    .cornerRadius(12)
+                    .clipped()
+                
+                Text(song.title)
+                    .foregroundColor(.white)
+                    .font(.headline)
+                
+                Text(song.artist)
+                    .foregroundColor(.white.opacity(0.7))
+                    .font(.subheadline)
+            }
         }
     }
 }
-

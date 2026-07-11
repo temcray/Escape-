@@ -10,7 +10,7 @@ import AVFoundation
 
 struct PlayerView: View {
     
-    let song: Song
+    let song: JamendoSong
     
     @State private var isPlaying = false
     @State private var volume: Float = 0.5

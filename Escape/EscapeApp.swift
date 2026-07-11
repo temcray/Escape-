@@ -13,6 +13,7 @@ struct EscapeApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Song.self,
+            User.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
@@ -22,11 +23,20 @@ struct EscapeApp: App {
             fatalError("Could not create ModelContainer: \(error)")
         }
     }()
+    
+    @AppStorage("loggedInUserId") private var loggedInUserId: String = ""
+    @AppStorage("isDarkMode") var isDarkMode: Bool = false
 
     var body: some Scene {
         WindowGroup {
-            LoginView()
+            if loggedInUserId.isEmpty {
+                LoginView()
+            } else {
+                MainTabView()
+                    .preferredColorScheme(isDarkMode ? .dark : .light)
+            }
         }
+        
         .modelContainer(sharedModelContainer)
     }
 }
