@@ -17,16 +17,16 @@ struct SettingsView: View {
     
     // Colors based on mode
     var backgroundColor: Color {
-        isDarkMode ? Color.black : Color(red: 0.0, green: 0.6, blue: 0.6)
+        isDarkMode ? Color.black : Color("darkMode")
     }
     
     var accentColor: Color {
-        isDarkMode ? Color.purple : Color(red: 0.0, green: 0.6, blue: 0.6)
+        isDarkMode ? Color.purple : Color("darkMode")
     }
     
     var body: some View {
         ZStack {
-            backgroundColor
+            Color("background")
                 .ignoresSafeArea()
             
             VStack(spacing: 25) {
@@ -70,24 +70,8 @@ struct SettingsView: View {
                 .cornerRadius(12)
                 .padding(.horizontal, 20)
                 
-                // LANGUAGE
-                HStack {
-                    Text("Language")
-                        .foregroundColor(.white)
-                        .font(.headline)
-                    Spacer()
-                    Picker("Language", selection: $language) {
-                        Text("English").tag("English")
-                        Text("Spanish").tag("Spanish")
-                        Text("Irish").tag("Irish")
-                    }
-                    .pickerStyle(MenuPickerStyle())
-                    .accentColor(.white)
-                }
-                .padding()
-                .background(Color.white.opacity(0.2))
-                .cornerRadius(12)
-                .padding(.horizontal, 20)
+              
+                Button("Logout", action: logOut)
                 
                 Spacer()
             }

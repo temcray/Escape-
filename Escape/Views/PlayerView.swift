@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import AVFoundation
+import AVKit
 
 struct PlayerView: View {
     
@@ -14,60 +14,62 @@ struct PlayerView: View {
     
     @State private var isPlaying = false
     @State private var volume: Float = 0.5
-    @State private var showVolumeWarning: Bool = false
-    
-    @State private var player: AVAudioPlayer?
+    @State private var showVolumeWarning = false
+    @State private var player: AVPlayer?
     
     var body: some View {
         ZStack {
-            Color(red: 0.0, green: 0.6, blue: 0.6)
+            Color("oceanTeal")
                 .ignoresSafeArea()
             
-            VStack(spacing: 30){
+            VStack(spacing: 30) {
                 
-                //ALBUM PIC
-                Image(song.albumImage)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 250, height: 250)
-                    .cornerRadius(20)
-                    .clipped()
-                    .padding(.top, 40)
+                // ALBUM IMAGE FROM URL
+                AsyncImage(url: URL(string: song.albumImage)) { image in
+                    image
+                        .resizable()
+                        .scaledToFill()
+                } placeholder: {
+                    Color.white.opacity(0.3)
+                }
+                .frame(width: 250, height: 250)
+                .cornerRadius(20)
+                .clipped()
+                .padding(.top, 40)
                 
                 // SONG INFO
                 Text(song.title)
-                    .font(.system(size: 28, weight: .bold))
+                    .font(.title.bold())
                     .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 20)
                 
                 Text(song.artist)
                     .font(.headline)
-                    .foregroundColor(.white .opacity(0.7))
+                    .foregroundColor(.white.opacity(0.7))
                 
-                // PLAY/PAUSE
+                // PLAY/PAUSE BUTTON
                 Button(action: {
-                    isPlaying.toggle()
+                    togglePlayback()
                 }) {
                     Image(systemName: isPlaying ? "pause.circle.fill" : "play.circle.fill")
                         .font(.system(size: 80))
                         .foregroundColor(.white)
                 }
                 
-                // VOLUME CONTRAL
-                VStack(spacing: 8){
-                    
-                    HStack{
+                // VOLUME CONTROL
+                VStack(spacing: 8) {
+                    HStack {
                         Image(systemName: "speaker.fill")
                             .foregroundColor(.white)
                         
                         Slider(value: $volume, in: 0...1, step: 0.01)
                             .accentColor(.white)
                             .onChange(of: volume) { newValue in
-                                if newValue > 0.8 {
-                                    showVolumeWarning = true
-                                } else {
-                                    showVolumeWarning = false
-                                }
+                                player?.volume = newValue
+                                showVolumeWarning = newValue > 0.8
                             }
+                        
                         Image(systemName: "speaker.wave.3.fill")
                             .foregroundColor(.white)
                     }
@@ -75,7 +77,7 @@ struct PlayerView: View {
                     
                     // VOLUME WARNING
                     if showVolumeWarning {
-                        Text("High Volume may affect your hearing")
+                        Text("⚠️ High volume may affect your hearing")
                             .foregroundColor(.yellow)
                             .font(.caption)
                             .multilineTextAlignment(.center)
@@ -86,11 +88,46 @@ struct PlayerView: View {
                 Spacer()
             }
         }
+        .onAppear {
+            setupPlayer()
+        }
+        .onDisappear {
+            player?.pause()
+            player = nil
+        }
     }
     
+    // SET UP THE PLAYER
+    func setupPlayer() {
+        guard let url = URL(string: song.audioURL) else {
+            print("Invalid audio URL")
+            return
+        }
+        player = AVPlayer(url: url)
+        player?.volume = volume
+        try? AVAudioSession.sharedInstance().setCategory(.playback)
+        try? AVAudioSession.sharedInstance().setActive(true)
+    }
+    
+    // PLAY OR PAUSE
+    func togglePlayback() {
+        guard let player = player else { return }
+        if isPlaying {
+            player.pause()
+        } else {
+            player.play()
+        }
+        isPlaying.toggle()
+    }
 }
 
-#Preview{
-    PlayerView(song: Song(title: "escapeImage 1", artist: "Artist One", albumImage: "beach", audioURL: ""))
-    }
-
+#Preview {
+    PlayerView(song: JamendoSong(
+        id: "1",
+        title: "Ocean Breeze",
+        artist: "Artist One",
+        album: "Album One",
+        albumImage: "",
+        audioURL: ""
+    ))
+}

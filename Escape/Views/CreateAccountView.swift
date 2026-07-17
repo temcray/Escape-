@@ -14,13 +14,13 @@ struct CreateAccountView: View {
     
     var body: some View {
         ZStack {
-            Color(red: 0.0, green: 0.6, blue: 0.6)
+            Color("oceanTeal")
                 .ignoresSafeArea()
             
             VStack(spacing: 20) {
                 
                 Text("Join Escape")
-                    .font(.system(size: 36, weight: .bold))
+                    .font(.largeTitle.bold())
                     .foregroundColor(.white)
                     .padding(.top, 60)
                 
@@ -68,7 +68,7 @@ struct CreateAccountView: View {
                 Button(action: saveUser) {
                     Text("Join Escape")
                         .font(.headline)
-                        .foregroundColor(Color(red: 0.0, green: 0.6, blue: 0.6))
+                        .foregroundColor(Color("oceanTeal"))
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(Color.white)

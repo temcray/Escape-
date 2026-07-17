@@ -28,14 +28,14 @@ struct LoginView: View {
         NavigationStack {
             ZStack {
                 // background color
-                Color(red: 0.0, green: 0.6, blue: 0.6)
+                Color("oceanTeal")
                     .ignoresSafeArea()
                 
                 VStack(spacing: 30) {
                     
                     // app name
                     Text("ESCAPE")
-                        .font(.system(size: 52, weight: .bold))
+                        .font(.largeTitle.bold())
                         .foregroundColor(.white)
                         .padding(.top, 80)
                     
@@ -85,7 +85,7 @@ struct LoginView: View {
                     Button(action: {showCreateAccount = true}) {
                         Text("Create Account")
                             .font(.headline)
-                            .foregroundColor(Color(red: 0.0, green: 0.6, blue: 0.6))
+                            .foregroundColor(Color("oceanTeal"))
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color.white)

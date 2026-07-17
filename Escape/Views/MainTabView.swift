@@ -12,7 +12,7 @@ struct MainTabView: View {
     
     @AppStorage("isDarkMode") var isDarkMode: Bool = false
     @AppStorage("fontSize") var fontSize: String = "Medium"
-   
+    
     
     var dynamicFont: Font {
         switch fontSize {
@@ -28,20 +28,23 @@ struct MainTabView: View {
                 .tabItem {
                     Image(systemName: "house.fill")
                     Text("Home")
+                    
                 }
             SearchView()
-                .tabItem {
-                    Image(systemName: "magnifyingglass")
-                    Text("Search")
+                        .tabItem {
+                            Image(systemName: "magnifyingglass")
+                            Text("Search")
+                        }
+                    SettingsView()
+                        .tabItem {
+                            Image(systemName: "gearshape.fill")
+                            Text("Settings")
+                                .font(.largeTitle.bold())
+                        }
                 }
-            SettingsView()
-                .tabItem {
-                    Image(systemName: "gearshape.fill")
-                    Text("Settings")
-                }
+                .accentColor(isDarkMode ? .purple : Color("Dark Mode"))
+                .preferredColorScheme(isDarkMode ? .dark : .light)
+                .environment(\.font, dynamicFont)
         }
-        .accentColor(isDarkMode ? .purple : Color(red: 0.0, green: 0.6, blue: 0.6))
-        .preferredColorScheme(isDarkMode ? .dark : .light)
-        .environment(\.font, dynamicFont)
     }
-}
+
