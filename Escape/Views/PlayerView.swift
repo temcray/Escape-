@@ -121,13 +121,3 @@ struct PlayerView: View {
     }
 }
 
-#Preview {
-    PlayerView(song: JamendoSong(
-        id: "1",
-        title: "Ocean Breeze",
-        artist: "Artist One",
-        album: "Album One",
-        albumImage: "",
-        audioURL: ""
-    ))
-}

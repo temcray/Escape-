@@ -11,6 +11,7 @@ import AVFoundation
 
 struct SearchView: View {
     
+    @AppStorage("isDarkMode") var isDarkMode: Bool = false
     @State private var searchText = ""
     @State private var isListening = false
     @State private var jamendoService = JamendoService()
@@ -22,7 +23,7 @@ struct SearchView: View {
     
     var body: some View {
         ZStack {
-            Color("oceanTeal")
+            Color(isDarkMode ? .background : Color("oceanTeal"))
                 .ignoresSafeArea()
             
             VStack(spacing: 20) {
@@ -54,7 +55,7 @@ struct SearchView: View {
                             .font(.title2)
                             .foregroundColor(.white)
                             .padding()
-                            .background(Color.white.opacity(0.3))
+                            .background(isDarkMode ? Color.white.opacity(0.2) : Color.white.opacity(0.3))
                             .cornerRadius(12)
                     }
                 }
@@ -210,7 +211,7 @@ struct HomeView: View {
                         Button(action: {
                             isGrid.toggle()
                         }) {
-                            Image(systemName: isGrid ? "list.bullet" : "square.grid")
+                            Image(systemName: isGrid ? "list.bullet" : "square.grid.2x2")
                                 .foregroundColor(.white)
                                 .font(.title2)
                         }

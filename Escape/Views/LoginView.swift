@@ -31,13 +31,39 @@ struct LoginView: View {
                 Color("oceanTeal")
                     .ignoresSafeArea()
                 
+                ZStack {
+                    // Background
+                    Color("oceanTeal")
+                        .ignoresSafeArea()
+                    
+                    // Waves ← ADD THIS
+                    VStack {
+                        Spacer()
+                        WaveView()
+                            .frame(height: 200)
+                    }
+                    .ignoresSafeArea()
+                    
+                    // Rest of your content
+                    VStack(spacing: 30) {
+                        // ESCAPE text, buttons etc
+                    }
+                }
+                
                 VStack(spacing: 30) {
                     
                     // app name
                     Text("ESCAPE")
-                        .font(.largeTitle.bold())
+                        .font(appFont(.largeTitle).bold())
                         .foregroundColor(.white)
                         .padding(.top, 80)
+                    
+                    //SUBTITLE
+                    Text("When life gets too much")
+                        .font(.subheadline)
+                        .foregroundColor(.white.opacity(0.8))
+                        .italic()
+                        .padding(.top, 4)
                     
                     Spacer()
                     

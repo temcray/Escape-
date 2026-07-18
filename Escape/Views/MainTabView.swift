@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 
+  
 struct MainTabView: View {
     
     @AppStorage("isDarkMode") var isDarkMode: Bool = false
@@ -39,7 +40,7 @@ struct MainTabView: View {
                         .tabItem {
                             Image(systemName: "gearshape.fill")
                             Text("Settings")
-                                .font(.largeTitle.bold())
+                                .font(appFont(.largeTitle).bold())
                         }
                 }
                 .accentColor(isDarkMode ? .purple : Color("Dark Mode"))

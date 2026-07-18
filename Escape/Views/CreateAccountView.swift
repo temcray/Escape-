@@ -17,6 +17,24 @@ struct CreateAccountView: View {
             Color("oceanTeal")
                 .ignoresSafeArea()
             
+            ZStack {
+                Color("oceanTeal")
+                    .ignoresSafeArea()
+                
+                // Waves ← ADD THIS
+                VStack {
+                    Spacer()
+                    WaveView()
+                        .frame(height: 200)
+                }
+                .ignoresSafeArea()
+                
+                // Rest of your content
+                VStack(spacing: 20) {
+                    // Join Escape, fields etc
+                }
+            }
+            
             VStack(spacing: 20) {
                 
                 Text("Join Escape")

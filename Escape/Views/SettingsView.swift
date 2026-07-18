@@ -71,7 +71,22 @@ struct SettingsView: View {
                 .padding(.horizontal, 20)
                 
               
-                Button("Logout", action: logOut)
+                Button(action: {
+                    logOut()
+                }) {
+                    Text("Log Out")
+                        .font(.headline.bold())
+                        .foregroundColor(isDarkMode ? .purple : .white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(isDarkMode ? Color.purple.opacity(0.3) : Color.red.opacity(0.8))
+                        .cornerRadius(12)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(isDarkMode ? Color.purple : Color.red, lineWidth: 2)
+                        )
+                }
+                .padding(.horizontal, 20)
                 
                 Spacer()
             }
