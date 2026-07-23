@@ -11,15 +11,26 @@ import AVKit
 struct PlayerView: View {
     
     let song: JamendoSong
+    let songs: [JamendoSong]
     
     @State private var isPlaying = false
+    @State private var isShuffling = false
+    @State private var isRepeating = false
+    @State private var currentIndex = 0
     @State private var volume: Float = 0.5
     @State private var showVolumeWarning = false
     @State private var player: AVPlayer?
+    @AppStorage("isDarkMode") var isDarkMode: Bool = false
+    
+    
+    var currentSong: JamendoSong {
+        guard !songs.isEmpty, currentIndex < songs.count else { return song }
+        return songs[currentIndex]
+    }
     
     var body: some View {
         ZStack {
-            Color("oceanTeal")
+             Color(isDarkMode ? Color.background : Color("oceanTeal"))
                 .ignoresSafeArea()
             
             VStack(spacing: 30) {
@@ -38,23 +49,38 @@ struct PlayerView: View {
                 .padding(.top, 40)
                 
                 // SONG INFO
-                Text(song.title)
+                Text(currentSong.title)
                     .font(.title.bold())
                     .foregroundColor(.white)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 20)
                 
-                Text(song.artist)
+                Text(currentSong.artist)
                     .font(.headline)
                     .foregroundColor(.white.opacity(0.7))
                 
-                // PLAY/PAUSE BUTTON
-                Button(action: {
-                    togglePlayback()
-                }) {
-                    Image(systemName: isPlaying ? "pause.circle.fill" : "play.circle.fill")
-                        .font(.system(size: 80))
-                        .foregroundColor(.white)
+                Text(currentSong.album)
+                    .font(.subheadline)
+                    .foregroundColor(.white.opacity(0.5))
+                
+                // SHUFFLE AND REPEAT
+                HStack(spacing: 40) {
+                    Button(action: { isShuffling.toggle()}) {
+                        Image(systemName: "shuffle")
+                            .font(.title2)
+                            .foregroundColor(isShuffling ? .yellow : .white)
+                    }
+                }
+                
+                .padding(.horizontal, 40)
+                
+                // PREVIOUS PLAY/PAUSE NEXT
+                HStack(spacing: 40) {
+                    Button(action: { previousSong() }) {
+                        Image(systemName: "backward.fill")
+                            .font(.system(size: 35))
+                            .foregroundColor(.white)
+                    }
                 }
                 
                 // VOLUME CONTROL

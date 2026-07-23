@@ -203,19 +203,20 @@ struct HomeView: View {
                 Color("background")
                     .ignoresSafeArea()
                 
+             
                 VStack {
                     
                     // TOGGLE GRID
                     HStack {
                         Spacer()
-                        Button(action: {
-                            isGrid.toggle()
-                        }) {
-                            Image(systemName: isGrid ? "list.bullet" : "square.grid.2x2")
-                                .foregroundColor(.white)
-                                .font(.title2)
-                        }
-                        .padding(.trailing, 20)
+//                        Button(action: {
+//                            isGrid.toggle()
+//                        }) {
+//                            Image(systemName: isGrid ? "list.bullet" : "square.grid.2x2")
+//                                .foregroundColor(.white)
+//                                .font(.title2)
+//                        }
+//                        .padding(.trailing, 20)
                     }
                     
                     // Loading indicator
@@ -231,7 +232,7 @@ struct HomeView: View {
                         ScrollView {
                             LazyVGrid(columns: columns, spacing: 20) {
                                 ForEach(jamendoService.songs) { song in
-                                    SongCardView(song: song)
+                                    SongCardView(song: song, songs: jamendoService.songs)
                                 }
                             }
                             .padding()
@@ -241,7 +242,7 @@ struct HomeView: View {
                         ScrollView {
                             VStack(spacing: 15) {
                                 ForEach(jamendoService.songs) { song in
-                                    SongCardView(song: song)
+                                    SongCardView(song: song, songs: jamendoService.songs)
                                 }
                             }
                             .padding()
@@ -249,8 +250,27 @@ struct HomeView: View {
                     }
                 }
             }
-            .navigationTitle("Escape")
-            .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("ESCAPE")
+                        .font(appFont(.largeTitle).bold())
+                        .foregroundColor(.white)
+                        .padding(.top, 80)
+                }
+                
+                ToolbarItem(placement:.topBarTrailing) {
+                    Button(action: {
+                        isGrid.toggle()
+                    }) {
+                        Image(systemName: isGrid ? "list.bullet" : "square.grid.2x2")
+                            .foregroundColor(.white)
+                            .font(.title2)
+                    }
+                    //.padding(.trailing, 20)
+                }
+            }
+            //.navigationTitle("Escape")
+            //.navigationBarTitleDisplayMode(.large)
             .onAppear {
                 jamendoService.fetchSongs()
             }
@@ -263,6 +283,7 @@ struct HomeView: View {
 struct SongCardView: View {
     
     let song: JamendoSong
+    let songs: [JamendoSong]
     
     var body: some View {
         NavigationLink(destination: PlayerView(song: song)) {

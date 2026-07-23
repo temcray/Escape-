@@ -31,8 +31,13 @@ class JamendoService {
                 return
             }
             
+            print("Data fetch completed, parsing response...")
+            
             do {
                 let decoded = try JSONDecoder().decode(JamendoResponse.self, from: data)
+                
+                //print(decoded)
+                
                 DispatchQueue.main.async {
                     self.songs = decoded.results.map { track in
                         JamendoSong(
