@@ -286,7 +286,7 @@ struct SongCardView: View {
     let songs: [JamendoSong]
     
     var body: some View {
-        NavigationLink(destination: PlayerView(song: song)) {
+        NavigationLink(destination: PlayerView(song: song, songs: songs)) {
             VStack {
                 //AsyncImage when they come off web site
                 AsyncImage(url: URL(string:song.albumImage)) { phase in

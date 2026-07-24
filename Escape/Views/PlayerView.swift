@@ -30,7 +30,7 @@ struct PlayerView: View {
     
     var body: some View {
         ZStack {
-             Color(isDarkMode ? Color.background : Color("oceanTeal"))
+            Color(isDarkMode ? Color.background : Color("oceanTeal"))
                 .ignoresSafeArea()
             
             VStack(spacing: 30) {
@@ -70,14 +70,35 @@ struct PlayerView: View {
                             .font(.title2)
                             .foregroundColor(isShuffling ? .yellow : .white)
                     }
+                    
+                    Spacer()
+                    
+                    Button(action: {isRepeating.toggle() }) {
+                        Image(systemName: "repeat")
+                            .font(.title2)
+                            .foregroundColor(isRepeating ? .yellow : .white)
+                    }
                 }
                 
                 .padding(.horizontal, 40)
                 
                 // PREVIOUS PLAY/PAUSE NEXT
                 HStack(spacing: 40) {
+                    
                     Button(action: { previousSong() }) {
                         Image(systemName: "backward.fill")
+                            .font(.system(size: 35))
+                            .foregroundColor(.white)
+                    }
+                    
+                    Button(action: { togglePlayback() }) {
+                        Image(systemName: isPlaying ? "pause.circle.fill" : "play.circle.fill")
+                            .font(.system(size: 80))
+                            .foregroundColor(.white)
+                    }
+                    
+                    Button(action: { nextSong() }) {
+                        Image(systemName: "forward.fill")
                             .font(.system(size: 35))
                             .foregroundColor(.white)
                     }
@@ -112,38 +133,81 @@ struct PlayerView: View {
                 }
                 
                 Spacer()
+                
             }
         }
         .onAppear {
-            setupPlayer()
+            setupIndex()
         }
         .onDisappear {
             player?.pause()
             player = nil
         }
+        
     }
     
-    // SET UP THE PLAYER
-    func setupPlayer() {
+    func setupIndex() {
+        if let index = songs.firstIndex(where: { $0.id == song.id }) {
+            currentIndex = index
+        }
+        loadAndPlay(song: currentSong)
+    }
+    
+    func loadAndPlay(song: JamendoSong) {
         guard let url = URL(string: song.audioURL) else {
-            print("Invalid audio URL")
+            print("x.fill. Invalid audio URL: \(song.audioURL)")
             return
         }
+        player?.pause()
         player = AVPlayer(url: url)
         player?.volume = volume
         try? AVAudioSession.sharedInstance().setCategory(.playback)
         try? AVAudioSession.sharedInstance().setActive(true)
+        player?.play()
+        isPlaying = true
+        
+        NotificationCenter.default.addObserver(
+            forName: .AVPlayerItemDidPlayToEndTime,
+            object: player?.currentItem,
+            queue: .main
+        ) { _ in
+            if isRepeating {
+                player?.seek(to: .zero)
+                player?.play()
+            } else {
+                nextSong()
+            }
+        }
+        
     }
     
-    // PLAY OR PAUSE
     func togglePlayback() {
-        guard let player = player else { return }
-        if isPlaying {
+        guard let player = player else {
+            print("x.fill player is nil")
+            return
+        }
+        
+        if isPlaying{
             player.pause()
-        } else {
+        }else {
             player.play()
         }
         isPlaying.toggle()
     }
+    
+    func nextSong() {
+        if isShuffling {
+            currentIndex = Int.random(in: 0..<songs.count)
+        } else {
+            currentIndex = currentIndex < songs.count - 1 ? currentIndex + 1 : 0
+        }
+        loadAndPlay(song: currentSong)
+    }
+    
+    func previousSong() {
+        currentIndex = currentIndex > 0 ? currentIndex - 1 : songs.count - 1
+        loadAndPlay(song: currentSong)
+    }
+    
+    
 }
-
