@@ -7,11 +7,15 @@
 
 import SwiftUI
 import AVKit
+import CoreMedia
 
 struct PlayerView: View {
     
     let song: JamendoSong
     let songs: [JamendoSong]
+    
+    @State private var currentTime: Double = 0
+    @State private var duration: Double = 0
     
     @State private var isPlaying = false
     @State private var isShuffling = false
@@ -62,6 +66,32 @@ struct PlayerView: View {
                 Text(currentSong.album)
                     .font(.subheadline)
                     .foregroundColor(.white.opacity(0.5))
+                
+                // PROGRESS BAR
+                VStack(spacing: 4) {
+                    
+                    // SLIDER
+                    Slider(value: $currentTime, in: 0...max(duration, 1), step: 0.1) { editing in
+                        if !editing {
+                            player?.seek(to: CMTime(seconds: currentTime, preferredTimescale: 600))
+                        }
+                    }
+                    .accentColor(.white)
+                    .padding(.horizontal, 30)
+                    
+                    //TIME STEPS
+                    HStack {
+                        Text(formatTime(currentTime))
+                            .foregroundColor(.white.opacity(0.7))
+                            .font(.caption)
+                        
+                        Spacer()
+                        
+                        Text(formatTime(duration))
+                            .font(.caption)
+                    }
+                    .padding(.horizontal, 30)
+                }
                 
                 // SHUFFLE AND REPEAT
                 HStack(spacing: 40) {
@@ -209,5 +239,18 @@ struct PlayerView: View {
         loadAndPlay(song: currentSong)
     }
     
+    //FORMAT TIME
+    func formatTime(_seconds: Double) -> String {
+        let minutes = Int(seconds) / 60
+        let secs = Int(seconds) % 60
+        return String(format: "%02d:%02d", minutes, secs)
+    }
     
+    //START TRACKING TIME
+    func startTimeObserver() {
+        player? .addPeriodicTimeObserver()
+        
+        
+        
+    }
 }
