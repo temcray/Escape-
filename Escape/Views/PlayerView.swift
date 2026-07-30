@@ -67,6 +67,16 @@ struct PlayerView: View {
                     .font(.subheadline)
                     .foregroundColor(.white.opacity(0.5))
                 
+                HStack(spacing: 40){
+                    Button(action: { isShuffling.toggle() }){
+                        Image(systemName: "shuffle")
+                            .font(.title2)
+                            .foregroundColor(isShuffling ? .yellow : .white)
+                    }
+                }
+                
+                .padding(.horizontal, 40)
+                
                 // PROGRESS BAR
                 VStack(spacing: 4) {
                     
@@ -240,7 +250,7 @@ struct PlayerView: View {
     }
     
     //FORMAT TIME
-    func formatTime(_seconds: Double) -> String {
+    func formatTime(_ seconds: Double) -> String {
         let minutes = Int(seconds) / 60
         let secs = Int(seconds) % 60
         return String(format: "%02d:%02d", minutes, secs)
@@ -248,9 +258,15 @@ struct PlayerView: View {
     
     //START TRACKING TIME
     func startTimeObserver() {
-        player? .addPeriodicTimeObserver()
-        
-        
-        
+        let interval = CMTime(seconds: 0.5, preferredTimescale: 600)
+        player?.addPeriodicTimeObserver(forInterval: interval, queue: .main) { time in
+            currentTime = time.seconds
+            if let item = player?.currentItem {
+                let dur = item.duration.seconds
+                if !dur.isNaN {
+                    duration = dur
+                }
+            }
+        }
     }
 }
