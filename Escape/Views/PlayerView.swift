@@ -67,13 +67,7 @@ struct PlayerView: View {
                     .font(.subheadline)
                     .foregroundColor(.white.opacity(0.5))
                 
-                HStack(spacing: 40){
-                    Button(action: { isShuffling.toggle() }){
-                        Image(systemName: "shuffle")
-                            .font(.title2)
-                            .foregroundColor(isShuffling ? .yellow : .white)
-                    }
-                }
+              
                 
                 .padding(.horizontal, 40)
                 
@@ -160,7 +154,7 @@ struct PlayerView: View {
                         Image(systemName: "speaker.wave.3.fill")
                             .foregroundColor(.white)
                     }
-                    .padding(.horizontal, 30)
+                    .padding(.bottom, 60)
                     
                     // VOLUME WARNING
                     if showVolumeWarning {
@@ -173,6 +167,7 @@ struct PlayerView: View {
                 }
                 
                 Spacer()
+                    .frame(maxHeight: 20)
                 
             }
         }
