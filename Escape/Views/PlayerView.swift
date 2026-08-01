@@ -47,7 +47,7 @@ struct PlayerView: View {
                 } placeholder: {
                     Color.white.opacity(0.3)
                 }
-                .frame(width: 250, height: 250)
+                .frame(width: 240, height: 240)
                 .cornerRadius(20)
                 .clipped()
                 .padding(.top, 40)
